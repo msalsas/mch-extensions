@@ -3,20 +3,35 @@ import { useExtensionsStore } from "../stores/extensions";
 import Extension from "./Extension.vue";
 
 const extensionStore = useExtensionsStore();
-const fetchExtensions = () => extensionStore.fetchExtensions();
+const init = () => extensionStore.init();
+const prevPage = () => extensionStore.prevPage();
+const nextPage = () => extensionStore.nextPage();
 
-fetchExtensions();
+init();
 
 </script>
 
 <template>
   <div class="extension">
     <h1>{{ extensionStore.count }} extensions</h1>
+    <button @click="prevPage">Prev</button>
+    <button @click="nextPage">Next</button>
     <ul>
-      <li v-for="extension in extensionStore.extensions">
-        <Extension :name="extension.name" :external_url="extension.external_url" :image_url="extension.image_url"/>
+      <li v-for="extension in extensionStore.viewExtensions">
+        <Extension
+            :type_name="extension.type_name"
+            :external_url="extension.external_url"
+            :extension_url="extension.extension_url"
+            :image_url="extension.image_url"
+            :lv="extension.lv"
+            :hp="extension.hp"
+            :phy="extension.phy"
+            :int="extension.int"
+            :agi="extension.agi"/>
       </li>
     </ul>
+    <button @click="prevPage">Prev</button>
+    <button @click="nextPage">Next</button>
   </div>
 </template>
 
