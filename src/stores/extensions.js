@@ -11,6 +11,7 @@ export const useExtensionsStore = defineStore("extensions", () => {
     const viewExtensions = ref([]);
     const count = ref(0);
     const tokenURIPrefix = ref('');
+    const loadingAll = ref(false);
     const currentPage = ref(1);
     const limit = 20;
 
@@ -53,6 +54,23 @@ export const useExtensionsStore = defineStore("extensions", () => {
         });
     }
 
+    function loadAll() {
+        loadingAll.value = true;
+        for (let i = 0; i < count.value; i++) {
+            setTimeout(() => {
+                extensionMethod('tokenByIndex', (id) => {
+                    if (extensions.value.some(extension => extension.id === id)) {
+                        return;
+                    }
+
+                    console.log('Loading metadata for ' + id)
+
+                    saveMetadata(id);
+                }, i);
+            }, 1000 * i);
+        }
+    }
+
     function fetchExtensions() {
         let loopCount = 0;
         for (let i = (currentPage.value - 1) * limit; i < (currentPage.value - 1) * limit + limit; i++) {
@@ -62,30 +80,37 @@ export const useExtensionsStore = defineStore("extensions", () => {
                     viewExtensions.value[loopCount++] = extensions.value.find(extension => extension.id === id);
                     return;
                 }
-                extensionMetadata(id, tokenURIPrefix.value, (metadata) => {
 
-                    extensions.value.push({
-                        'id': id,
-                        ...metadata,
-                    });
-                    localStorage.setItem('extensions', JSON.stringify(extensions.value));
-
-                    if (!uniqueExtensions.value.some(extension => extension.extension_type === metadata.extension_type) &&
-                        metadata.lv === maxLv(metadata.rarity)) {
-                        uniqueExtensions.value.push({
-                            'id': id,
-                            ...metadata,
-                        });
-                        localStorage.setItem('uniqueExtensions', JSON.stringify(uniqueExtensions.value));
-                    }
-
+                saveMetadata(id, (metadata) => {
                     viewExtensions.value[loopCount++] = {
                         'id': id,
                         ...metadata,
                     };
-                })
+                });
             }, i)
         }
+    }
+
+    function saveMetadata(id, callback = (metadata) => {}) {
+        extensionMetadata(id, tokenURIPrefix.value, (metadata) => {
+
+            extensions.value.push({
+                'id': id,
+                ...metadata,
+            });
+            localStorage.setItem('extensions', JSON.stringify(extensions.value));
+
+            if (!uniqueExtensions.value.some(extension => extension.extension_type === metadata.extension_type) &&
+                metadata.lv === maxLv(metadata.rarity)) {
+                uniqueExtensions.value.push({
+                    'id': id,
+                    ...metadata,
+                });
+                localStorage.setItem('uniqueExtensions', JSON.stringify(uniqueExtensions.value));
+            }
+
+            callback(metadata);
+        })
     }
 
     function prevPage() {
@@ -104,5 +129,5 @@ export const useExtensionsStore = defineStore("extensions", () => {
         }
     }
 
-    return { count, extensions, uniqueExtensions, viewExtensions, init, prevPage, nextPage };
+    return { count, extensions, uniqueExtensions, viewExtensions, loadingAll, init, prevPage, nextPage, loadAll };
 });
