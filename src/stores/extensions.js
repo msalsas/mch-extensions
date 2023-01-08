@@ -9,11 +9,13 @@ export const useExtensionsStore = defineStore("extensions", () => {
     const extensions = ref(localStorageExtensions);
     const uniqueExtensions = ref(localStorageUniqueExtensions);
     const viewExtensions = ref([]);
+    const viewUniqueExtensions = ref([]);
     const count = ref(0);
     const tokenURIPrefix = ref('');
     const loadingAll = ref(false);
     const currentPage = ref(1);
-    const limit = 20;
+    const uniqueCurrentPage = ref(1);
+    const limit = ref(20);
 
     function maxLv(rarity) {
         switch (rarity) {
@@ -35,6 +37,12 @@ export const useExtensionsStore = defineStore("extensions", () => {
     function init() {
         totalSupply(() => {
             getTokenURIPrefix(() => { fetchExtensions() })
+        });
+    }
+
+    function initUnique() {
+        totalSupply(() => {
+            getTokenURIPrefix(() => { fetchUniqueExtensions() })
         });
     }
 
@@ -73,7 +81,7 @@ export const useExtensionsStore = defineStore("extensions", () => {
 
     function fetchExtensions() {
         let loopCount = 0;
-        for (let i = (currentPage.value - 1) * limit; i < (currentPage.value - 1) * limit + limit; i++) {
+        for (let i = (currentPage.value - 1) * limit.value; i < (currentPage.value - 1) * limit.value + limit.value; i++) {
             extensionMethod('tokenByIndex', (id) => {
 
                 if (extensions.value.some(extension => extension.id === id)) {
@@ -88,6 +96,15 @@ export const useExtensionsStore = defineStore("extensions", () => {
                     };
                 });
             }, i)
+        }
+    }
+
+    function fetchUniqueExtensions() {
+        let loopCount = 0;
+        for (let i = (uniqueCurrentPage.value - 1) * limit.value; i < (uniqueCurrentPage.value - 1) * limit.value + limit.value; i++) {
+            if (typeof uniqueExtensions.value[i] !== "undefined") {
+                viewUniqueExtensions.value[loopCount++] = uniqueExtensions.value[i];
+            }
         }
     }
 
@@ -113,6 +130,10 @@ export const useExtensionsStore = defineStore("extensions", () => {
         })
     }
 
+    function loadAllProgress() {
+        return extensions.value.length / count.value * 100;
+    }
+
     function prevPage() {
         if (currentPage.value > 1) {
             currentPage.value--;
@@ -122,12 +143,32 @@ export const useExtensionsStore = defineStore("extensions", () => {
     }
 
     function nextPage() {
-        if (currentPage.value <= count.value/limit) {
+        if (currentPage.value <= count.value/limit.value) {
             currentPage.value++;
 
             fetchExtensions()
         }
     }
 
-    return { count, extensions, uniqueExtensions, viewExtensions, loadingAll, init, prevPage, nextPage, loadAll };
+    function uniquePrevPage() {
+        if (uniqueCurrentPage.value > 1) {
+            uniqueCurrentPage.value--;
+
+            fetchUniqueExtensions()
+        }
+    }
+
+    function uniqueNextPage() {
+        if (uniqueCurrentPage.value <= getCountUnique()/limit.value) {
+            uniqueCurrentPage.value++;
+
+            fetchUniqueExtensions()
+        }
+    }
+
+    function getCountUnique() {
+        return uniqueExtensions.value.length;
+    }
+
+    return { count, extensions, currentPage, uniqueCurrentPage, limit, uniqueExtensions, viewExtensions, viewUniqueExtensions, loadingAll, getCountUnique, init, initUnique, prevPage, nextPage, uniquePrevPage, uniqueNextPage, loadAll, loadAllProgress };
 });

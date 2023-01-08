@@ -3,21 +3,20 @@ import { useExtensionsStore } from "../stores/extensions";
 import Extension from "./Extension.vue";
 
 const extensionStore = useExtensionsStore();
-const init = () => extensionStore.init();
-const prevPage = () => extensionStore.prevPage();
-const nextPage = () => extensionStore.nextPage();
+const initUnique = () => extensionStore.initUnique();
+const getCountUnique = () => extensionStore.getCountUnique();
+const uniquePrevPage = () => extensionStore.uniquePrevPage();
+const uniqueNextPage = () => extensionStore.uniqueNextPage();
 const loadAll = () => extensionStore.loadAll();
 const loadAllProgress = () => extensionStore.loadAllProgress();
 
-init();
+initUnique();
 
 </script>
 
 <template>
   <div class="extensions">
-    <v-icon icon="mdi-home" />
-
-    <h1>{{ extensionStore.count }} extensions</h1>
+    <h1>{{ getCountUnique() }} extensions</h1>
 
     <v-btn v-if="!extensionStore.loadingAll" @click="loadAll">Load all</v-btn>
     <v-btn v-else disabled="disabled"><v-progress-circular indeterminate :size="20" :width="3"></v-progress-circular>&nbsp;Loading</v-btn>
@@ -38,13 +37,13 @@ init();
       </v-select>
     </div>
 
-    <p>Page {{ extensionStore.currentPage }}</p>
+    <p>Page {{ extensionStore.uniqueCurrentPage }}</p>
 
-    <v-btn v-if="extensionStore.currentPage > 1" @click="prevPage">Prev</v-btn>
-    <v-btn v-if="extensionStore.currentPage < extensionStore.count/extensionStore.limit" @click="nextPage">Next</v-btn>
+    <v-btn v-if="extensionStore.uniqueCurrentPage > 1" @click="uniquePrevPage">Prev</v-btn>
+    <v-btn v-if="extensionStore.uniqueCurrentPage < getCountUnique()/extensionStore.limit" @click="uniqueNextPage">Next</v-btn>
 
     <ul>
-      <li v-for="extension in extensionStore.viewExtensions">
+      <li v-for="extension in extensionStore.viewUniqueExtensions">
         <Extension
             :type_name="extension.type_name"
             :external_url="extension.external_url"
@@ -57,10 +56,10 @@ init();
             :agi="extension.agi"/>
       </li>
     </ul>
-    <p>Page {{ extensionStore.currentPage }}</p>
+    <p>Page {{ extensionStore.uniqueCurrentPage }}</p>
 
-    <v-btn v-if="extensionStore.currentPage > 1" @click="prevPage">Prev</v-btn>
-    <v-btn v-if="extensionStore.currentPage < extensionStore.count/extensionStore.limit" @click="nextPage">Next</v-btn>
+    <v-btn v-if="extensionStore.uniqueCurrentPage > 1" @click="uniquePrevPage">Prev</v-btn>
+    <v-btn v-if="extensionStore.uniqueCurrentPage < getCountUnique()/extensionStore.limit" @click="uniqueNextPage">Next</v-btn>
   </div>
 </template>
 
