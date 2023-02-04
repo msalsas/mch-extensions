@@ -2,17 +2,31 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import extensionMethod from "../helper/extensionMethod";
 import extensionMetadata from "../helper/extensionMetadata";
+import {initDB, getFromDB, addToDB} from "../helper/extensionsIndexedDB";
 
 export const useExtensionsStore = defineStore("extensions", () => {
-    const localStorageExtensions = localStorage.getItem('extensions') ? JSON.parse(localStorage.getItem('extensions')) : [];
+    const savedExtensions = [];
+    let extensions = ref(savedExtensions);
+    initDB((extensionObjectStore) => {
+        extensionObjectStore.openCursor().onsuccess = (event) => {
+            const cursor = event.target.result;
+            if (cursor) {
+                savedExtensions.push(cursor.value)
+                cursor.continue();
+            } else {
+                console.log("No more entries!");
+            }
+        };
+    });
     const localStorageUniqueExtensions = localStorage.getItem('uniqueExtensions') ? JSON.parse(localStorage.getItem('uniqueExtensions')) : [];
-    const extensions = ref(localStorageExtensions);
+
     const uniqueExtensions = ref(localStorageUniqueExtensions);
     const viewExtensions = ref([]);
     const viewUniqueExtensions = ref([]);
     const count = ref(0);
     const tokenURIPrefix = ref('');
     const loadingAll = ref(false);
+    const loadingAllIndex = ref(0);
     const currentPage = ref(1);
     const uniqueCurrentPage = ref(1);
     const limit = ref(20);
@@ -64,8 +78,13 @@ export const useExtensionsStore = defineStore("extensions", () => {
 
     function loadAll() {
         loadingAll.value = true;
-        for (let i = 0; i < count.value; i++) {
+        for (let i = loadingAllIndex.value; i < count.value; i++) {
+
             setTimeout(() => {
+                if (!loadingAll.value) {
+                    loadingAllIndex.value = i;
+                    return;
+                }
                 extensionMethod('tokenByIndex', (id) => {
                     if (extensions.value.some(extension => extension.id === id)) {
                         return;
@@ -77,6 +96,10 @@ export const useExtensionsStore = defineStore("extensions", () => {
                 }, i);
             }, 1000 * i);
         }
+    }
+
+    function loadAllStop() {
+        loadingAll.value = false;
     }
 
     function fetchExtensions() {
@@ -111,11 +134,17 @@ export const useExtensionsStore = defineStore("extensions", () => {
     function saveMetadata(id, callback = (metadata) => {}) {
         extensionMetadata(id, tokenURIPrefix.value, (metadata) => {
 
+            if (metadata.lv === maxLv(metadata.rarity)) {
+                metadata.is_max_lv = 1;
+            }
             extensions.value.push({
                 'id': id,
                 ...metadata,
             });
-            localStorage.setItem('extensions', JSON.stringify(extensions.value));
+            saveExtension({
+                'id': id,
+                ...metadata,
+            });
 
             if (!uniqueExtensions.value.some(extension => extension.extension_type === metadata.extension_type) &&
                 metadata.lv === maxLv(metadata.rarity)) {
@@ -123,7 +152,6 @@ export const useExtensionsStore = defineStore("extensions", () => {
                     'id': id,
                     ...metadata,
                 });
-                localStorage.setItem('uniqueExtensions', JSON.stringify(uniqueExtensions.value));
             }
 
             callback(metadata);
@@ -132,6 +160,10 @@ export const useExtensionsStore = defineStore("extensions", () => {
 
     function loadAllProgress() {
         return extensions.value.length / count.value * 100;
+    }
+
+    function allLoaded() {
+        return loadAllProgress() === 100;
     }
 
     function prevPage() {
@@ -170,5 +202,11 @@ export const useExtensionsStore = defineStore("extensions", () => {
         return uniqueExtensions.value.length;
     }
 
-    return { count, extensions, currentPage, uniqueCurrentPage, limit, uniqueExtensions, viewExtensions, viewUniqueExtensions, loadingAll, getCountUnique, init, initUnique, prevPage, nextPage, uniquePrevPage, uniqueNextPage, loadAll, loadAllProgress };
+    function saveExtension(extension) {
+        initDB((extensionObjectStore) => {
+            addToDB(extensionObjectStore, extension);
+        });
+    }
+
+    return { count, extensions, currentPage, uniqueCurrentPage, limit, uniqueExtensions, viewExtensions, viewUniqueExtensions, loadingAll, getCountUnique, init, initUnique, prevPage, nextPage, uniquePrevPage, uniqueNextPage, loadAll, loadAllProgress, loadAllStop, allLoaded };
 });
