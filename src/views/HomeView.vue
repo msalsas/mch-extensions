@@ -9,8 +9,9 @@ const tab = ref(null);
 
 <template>
   <main>
+    <h1 class="d-flex justify-center">MCH Extensions</h1>
     <v-tabs v-model="tab">
-      <v-tab value="extensions">Extensions</v-tab>
+      <v-tab value="extensions">All Extensions</v-tab>
       <v-tab value="unique-extensions">Unique Extensions</v-tab>
     </v-tabs>
     <v-window v-model="tab">

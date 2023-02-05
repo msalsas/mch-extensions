@@ -4,8 +4,22 @@ import Extension from "./Extension.vue";
 
 const extensionStore = useExtensionsStore();
 const init = () => extensionStore.init();
-const prevPage = () => extensionStore.prevPage();
-const nextPage = () => extensionStore.nextPage();
+const prevPage = () => {
+  extensionStore.prevPage();
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'smooth'
+  });
+}
+const nextPage = () => {
+  extensionStore.nextPage();
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'smooth'
+  });
+}
 const loadAll = () => extensionStore.loadAll();
 const loadAllProgress = () => extensionStore.loadAllProgress();
 const loadAllStop = () => extensionStore.loadAllStop();
@@ -16,7 +30,7 @@ init();
 
 <template>
   <div class="extensions">
-    <h1>{{ extensionStore.count }} extensions</h1>
+    <h2 class="ma-2 pa-2 d-flex justify-center">{{ extensionStore.count }} extensions</h2>
 
     <v-btn v-if="!extensionStore.loadingAll && !extensionStore.allLoaded" @click="loadAll">Load all</v-btn>
     <v-btn v-else-if="extensionStore.loadingAll" disabled="disabled"><v-progress-circular indeterminate :size="20" :width="3"></v-progress-circular>&nbsp;Loading</v-btn>
