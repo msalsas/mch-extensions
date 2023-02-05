@@ -2,34 +2,30 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import extensionMethod from "../helper/extensionMethod";
 import extensionMetadata from "../helper/extensionMetadata";
-import {initDB, getFromDB, addToDB} from "../helper/extensionsIndexedDB";
+import {initDB, getFromDB, addToDB, getAll, getUnique} from "../helper/extensionsIndexedDB";
 
 export const useExtensionsStore = defineStore("extensions", () => {
-    const savedExtensions = [];
-    let extensions = ref(savedExtensions);
-    initDB((extensionObjectStore) => {
-        extensionObjectStore.openCursor().onsuccess = (event) => {
-            const cursor = event.target.result;
-            if (cursor) {
-                savedExtensions.push(cursor.value)
-                cursor.continue();
-            } else {
-                console.log("No more entries!");
-            }
-        };
-    });
-    const localStorageUniqueExtensions = localStorage.getItem('uniqueExtensions') ? JSON.parse(localStorage.getItem('uniqueExtensions')) : [];
-
-    const uniqueExtensions = ref(localStorageUniqueExtensions);
+    const extensions = ref([]);
+    const uniqueExtensions = ref([]);
     const viewExtensions = ref([]);
     const viewUniqueExtensions = ref([]);
     const count = ref(0);
+    const uniqueCount = ref(0);
     const tokenURIPrefix = ref('');
     const loadingAll = ref(false);
     const loadingAllIndex = ref(0);
     const currentPage = ref(1);
     const uniqueCurrentPage = ref(1);
     const limit = ref(20);
+    const order = ref([
+        {'title': 'HP', 'value': 'hp'},
+        {'title': 'PHY', 'value': 'phy'},
+        {'title': 'INT', 'value': 'int'},
+        {'title': 'AGI', 'value': 'agi'},
+    ]);
+
+    getExtensions();
+    getUniqueExtensions();
 
     function maxLv(rarity) {
         switch (rarity) {
@@ -122,6 +118,29 @@ export const useExtensionsStore = defineStore("extensions", () => {
         }
     }
 
+    function getExtensions() {
+        initDB((extensionObjectStore) => {
+            getAll(extensionObjectStore, (result) => {
+                extensions.value = result;
+            });
+        });
+    }
+
+    function getUniqueExtensions(order) {
+        initDB((extensionObjectStore) => {
+            getUnique(extensionObjectStore, order, (result) => {
+                uniqueExtensions.value = result;
+                uniqueCount.value = result.length;
+
+                fetchUniqueExtensions();
+            });
+        });
+    }
+
+    function getOrder() {
+        return order.value;
+    }
+
     function fetchUniqueExtensions() {
         let loopCount = 0;
         for (let i = (uniqueCurrentPage.value - 1) * limit.value; i < (uniqueCurrentPage.value - 1) * limit.value + limit.value; i++) {
@@ -191,15 +210,11 @@ export const useExtensionsStore = defineStore("extensions", () => {
     }
 
     function uniqueNextPage() {
-        if (uniqueCurrentPage.value <= getCountUnique()/limit.value) {
+        if (uniqueCurrentPage.value <= uniqueCount.value/limit.value) {
             uniqueCurrentPage.value++;
 
             fetchUniqueExtensions()
         }
-    }
-
-    function getCountUnique() {
-        return uniqueExtensions.value.length;
     }
 
     function saveExtension(extension) {
@@ -208,5 +223,5 @@ export const useExtensionsStore = defineStore("extensions", () => {
         });
     }
 
-    return { count, extensions, currentPage, uniqueCurrentPage, limit, uniqueExtensions, viewExtensions, viewUniqueExtensions, loadingAll, getCountUnique, init, initUnique, prevPage, nextPage, uniquePrevPage, uniqueNextPage, loadAll, loadAllProgress, loadAllStop, allLoaded };
+    return { count, extensions, currentPage, uniqueCurrentPage, limit, uniqueCount, uniqueExtensions, viewExtensions, viewUniqueExtensions, loadingAll, order, init, initUnique, getUniqueExtensions, getOrder, prevPage, nextPage, uniquePrevPage, uniqueNextPage, loadAll, loadAllProgress, loadAllStop, allLoaded };
 });

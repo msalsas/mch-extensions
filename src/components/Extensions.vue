@@ -32,17 +32,6 @@ init();
       <v-progress-linear :model-value="loadAllProgress()" :height="7"></v-progress-linear>
     </div>
 
-    <div class="order-filters">
-      <label>Order</label>
-      <v-select name="order" aria-label="order" :items="[
-          {'title': 'HP', 'value': 'hp'},
-          {'title': 'PHY', 'value': 'phy'},
-          {'title': 'INT', 'value': 'int'},
-          {'title': 'AGI', 'value': 'agi'},
-      ]">
-      </v-select>
-    </div>
-
     <p>Page {{ extensionStore.currentPage }}</p>
 
     <v-btn v-if="extensionStore.currentPage > 1" @click="prevPage">Prev</v-btn>

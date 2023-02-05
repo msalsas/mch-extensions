@@ -4,11 +4,13 @@ import Extension from "./Extension.vue";
 
 const extensionStore = useExtensionsStore();
 const initUnique = () => extensionStore.initUnique();
-const getCountUnique = () => extensionStore.getCountUnique();
 const uniquePrevPage = () => extensionStore.uniquePrevPage();
 const uniqueNextPage = () => extensionStore.uniqueNextPage();
 const loadAll = () => extensionStore.loadAll();
 const loadAllProgress = () => extensionStore.loadAllProgress();
+const getUniqueExtensions = () => extensionStore.getUniqueExtensions();
+const getOrder = () => extensionStore.getOrder();
+const onOrderChange = (evt) => extensionStore.getUniqueExtensions(evt);
 
 initUnique();
 
@@ -16,7 +18,7 @@ initUnique();
 
 <template>
   <div class="extensions">
-    <h1>{{ getCountUnique() }} extensions</h1>
+    <h1>{{ extensionStore.uniqueCount }} extensions</h1>
 
     <v-btn v-if="!extensionStore.loadingAll" @click="loadAll">Load all</v-btn>
     <v-btn v-else disabled="disabled"><v-progress-circular indeterminate :size="20" :width="3"></v-progress-circular>&nbsp;Loading</v-btn>
@@ -28,19 +30,14 @@ initUnique();
 
     <div class="order-filters">
       <label>Order</label>
-      <v-select name="order" aria-label="order" :items="[
-          {'title': 'HP', 'value': 'hp'},
-          {'title': 'PHY', 'value': 'phy'},
-          {'title': 'INT', 'value': 'int'},
-          {'title': 'AGI', 'value': 'agi'},
-      ]">
+      <v-select aria-label="order" :items="getOrder()" @update:modelValue="onOrderChange">
       </v-select>
     </div>
 
     <p>Page {{ extensionStore.uniqueCurrentPage }}</p>
 
     <v-btn v-if="extensionStore.uniqueCurrentPage > 1" @click="uniquePrevPage">Prev</v-btn>
-    <v-btn v-if="extensionStore.uniqueCurrentPage < getCountUnique()/extensionStore.limit" @click="uniqueNextPage">Next</v-btn>
+    <v-btn v-if="extensionStore.uniqueCurrentPage < extensionStore.uniqueCount/extensionStore.limit" @click="uniqueNextPage">Next</v-btn>
 
     <ul>
       <li v-for="extension in extensionStore.viewUniqueExtensions">
@@ -59,7 +56,7 @@ initUnique();
     <p>Page {{ extensionStore.uniqueCurrentPage }}</p>
 
     <v-btn v-if="extensionStore.uniqueCurrentPage > 1" @click="uniquePrevPage">Prev</v-btn>
-    <v-btn v-if="extensionStore.uniqueCurrentPage < getCountUnique()/extensionStore.limit" @click="uniqueNextPage">Next</v-btn>
+    <v-btn v-if="extensionStore.uniqueCurrentPage < extensionStore.uniqueCount/extensionStore.limit" @click="uniqueNextPage">Next</v-btn>
   </div>
 </template>
 
