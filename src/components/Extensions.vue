@@ -30,10 +30,11 @@ init();
       <v-progress-linear :model-value="loadAllProgress()" :height="7"></v-progress-linear>
     </div>
 
-    <p>Page {{ extensionStore.currentPage }}</p>
-
-    <v-btn v-if="extensionStore.currentPage > 1" @click="prevPage">Prev</v-btn>
-    <v-btn v-if="extensionStore.currentPage < extensionStore.count/extensionStore.limit" @click="nextPage">Next</v-btn>
+    <div class="d-flex flex-row-reverse mb-6 bg-surface-variant">
+      <v-sheet class="ma-2 bg-surface-variant">Page {{ extensionStore.currentPage }}</v-sheet>
+      <v-sheet class="ma-2 pa-2 bg-surface-variant"><v-btn v-if="extensionStore.currentPage < extensionStore.count/extensionStore.limit" @click="nextPage">Next</v-btn></v-sheet>
+      <v-sheet class="ma-2 pa-2 bg-surface-variant"><v-btn v-if="extensionStore.currentPage > 1" @click="prevPage">Prev</v-btn></v-sheet>
+    </div>
 
     <ul>
       <li v-for="extension in extensionStore.viewExtensions">
@@ -49,10 +50,12 @@ init();
             :agi="extension.agi"/>
       </li>
     </ul>
-    <p>Page {{ extensionStore.currentPage }}</p>
 
-    <v-btn v-if="extensionStore.currentPage > 1" @click="prevPage">Prev</v-btn>
-    <v-btn v-if="extensionStore.currentPage < extensionStore.count/extensionStore.limit" @click="nextPage">Next</v-btn>
+    <div class="d-flex flex-row-reverse mb-6 bg-surface-variant">
+      <v-sheet class="ma-2 bg-surface-variant">Page {{ extensionStore.currentPage }}</v-sheet>
+      <v-sheet class="ma-2 pa-2 bg-surface-variant"><v-btn v-if="extensionStore.currentPage < extensionStore.count/extensionStore.limit" @click="nextPage">Next</v-btn></v-sheet>
+      <v-sheet class="ma-2 pa-2 bg-surface-variant"><v-btn v-if="extensionStore.currentPage > 1" @click="prevPage">Prev</v-btn></v-sheet>
+    </div>
   </div>
 </template>
 

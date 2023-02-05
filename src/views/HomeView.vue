@@ -9,10 +9,7 @@ const tab = ref(null);
 
 <template>
   <main>
-    <v-tabs
-        v-model="tab"
-        bg-color="primary"
-    >
+    <v-tabs v-model="tab">
       <v-tab value="extensions">Extensions</v-tab>
       <v-tab value="unique-extensions">Unique Extensions</v-tab>
     </v-tabs>

@@ -45,10 +45,11 @@ initUnique();
       </v-select>
     </div>
 
-    <p>Page {{ extensionStore.uniqueCurrentPage }}</p>
-
-    <v-btn v-if="extensionStore.uniqueCurrentPage > 1" @click="uniquePrevPage">Prev</v-btn>
-    <v-btn v-if="extensionStore.uniqueCurrentPage < extensionStore.uniqueCount/extensionStore.limit" @click="uniqueNextPage">Next</v-btn>
+    <div class="d-flex flex-row-reverse mb-6 bg-surface-variant">
+      <v-sheet class="ma-2 bg-surface-variant">Page {{ extensionStore.uniqueCurrentPage }}</v-sheet>
+      <v-sheet class="ma-2 pa-2 bg-surface-variant"><v-btn v-if="extensionStore.uniqueCurrentPage < extensionStore.uniqueCount/extensionStore.limit" @click="uniqueNextPage">Next</v-btn></v-sheet>
+      <v-sheet class="ma-2 pa-2 bg-surface-variant"><v-btn v-if="extensionStore.uniqueCurrentPage > 1" @click="uniquePrevPage">Prev</v-btn></v-sheet>
+    </div>
 
     <ul>
       <li v-for="extension in extensionStore.viewUniqueExtensions">
@@ -64,10 +65,12 @@ initUnique();
             :agi="extension.agi"/>
       </li>
     </ul>
-    <p>Page {{ extensionStore.uniqueCurrentPage }}</p>
 
-    <v-btn v-if="extensionStore.uniqueCurrentPage > 1" @click="uniquePrevPage">Prev</v-btn>
-    <v-btn v-if="extensionStore.uniqueCurrentPage < extensionStore.uniqueCount/extensionStore.limit" @click="uniqueNextPage">Next</v-btn>
+    <div class="d-flex flex-row-reverse mb-6 bg-surface-variant">
+      <v-sheet class="ma-2 bg-surface-variant">Page {{ extensionStore.uniqueCurrentPage }}</v-sheet>
+      <v-sheet class="ma-2 pa-2 bg-surface-variant"><v-btn v-if="extensionStore.uniqueCurrentPage < extensionStore.uniqueCount/extensionStore.limit" @click="uniqueNextPage">Next</v-btn></v-sheet>
+      <v-sheet class="ma-2 pa-2 bg-surface-variant"><v-btn v-if="extensionStore.uniqueCurrentPage > 1" @click="uniquePrevPage">Prev</v-btn></v-sheet>
+    </div>
   </div>
 </template>
 
