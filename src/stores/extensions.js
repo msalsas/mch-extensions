@@ -23,6 +23,15 @@ export const useExtensionsStore = defineStore("extensions", () => {
         {'title': 'INT', 'value': 'int'},
         {'title': 'AGI', 'value': 'agi'},
     ]);
+    const rarities = ref([
+        {'title': 'C', 'value': 'Common'},
+        {'title': 'U', 'value': 'Uncommon'},
+        {'title': 'R', 'value': 'Rare'},
+        {'title': 'E', 'value': 'Epic'},
+        {'title': 'L', 'value': 'Legendary'},
+    ]);
+    const selectedOrder = ref('hp');
+    const selectedRarity = ref(null);
 
     getExtensions();
     getUniqueExtensions();
@@ -126,9 +135,9 @@ export const useExtensionsStore = defineStore("extensions", () => {
         });
     }
 
-    function getUniqueExtensions(order) {
+    function getUniqueExtensions() {
         initDB((extensionObjectStore) => {
-            getUnique(extensionObjectStore, order, (result) => {
+            getUnique(extensionObjectStore, selectedOrder.value, selectedRarity.value, (result) => {
                 uniqueExtensions.value = result;
                 uniqueCount.value = result.length;
 
@@ -137,8 +146,24 @@ export const useExtensionsStore = defineStore("extensions", () => {
         });
     }
 
+    function setRarity(rarity) {
+        selectedRarity.value = rarity;
+
+        getUniqueExtensions();
+    }
+
+    function setOrder(order) {
+        selectedOrder.value = order;
+
+        getUniqueExtensions();
+    }
+
     function getOrder() {
         return order.value;
+    }
+
+    function getRarities() {
+        return rarities.value;
     }
 
     function fetchUniqueExtensions() {
@@ -223,5 +248,9 @@ export const useExtensionsStore = defineStore("extensions", () => {
         });
     }
 
-    return { count, extensions, currentPage, uniqueCurrentPage, limit, uniqueCount, uniqueExtensions, viewExtensions, viewUniqueExtensions, loadingAll, order, init, initUnique, getUniqueExtensions, getOrder, prevPage, nextPage, uniquePrevPage, uniqueNextPage, loadAll, loadAllProgress, loadAllStop, allLoaded };
+    return {
+        count, extensions, currentPage, uniqueCurrentPage, limit, uniqueCount, uniqueExtensions, viewExtensions, viewUniqueExtensions,
+        loadingAll, order, selectedOrder, selectedRarity, init, initUnique, getUniqueExtensions, getOrder, getRarities, prevPage, nextPage,
+        uniquePrevPage, uniqueNextPage, loadAll, loadAllProgress, loadAllStop, allLoaded, setRarity, setOrder
+    };
 });

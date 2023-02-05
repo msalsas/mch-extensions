@@ -16,8 +16,6 @@ init();
 
 <template>
   <div class="extensions">
-    <v-icon icon="mdi-home" />
-
     <h1>{{ extensionStore.count }} extensions</h1>
 
     <v-btn v-if="!extensionStore.loadingAll && !extensionStore.allLoaded" @click="loadAll">Load all</v-btn>

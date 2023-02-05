@@ -119,14 +119,14 @@ function getAll(extensionObjectStore, callback) {
     };
 }
 
-function getUnique(extensionObjectStore, order = 'hp', callback) {
+function getUnique(extensionObjectStore, order = 'hp', rarity = null, callback) {
     const uniqueExtensions = [];
     const index = extensionObjectStore.index(order, "is_max_lv");
-    //const singleKeyRange = IDBKeyRange.only([null, 1]);
     index.openCursor(null, 'prev').onsuccess = (event) => {
         const cursor = event.target.result;
 
-        if (cursor && !uniqueExtensions.some((uniqueExtension) => uniqueExtension.type_name === cursor.value.type_name)) {
+        if (cursor && !uniqueExtensions.some((uniqueExtension) => uniqueExtension.type_name === cursor.value.type_name) &&
+            (rarity && cursor.value.rarity === rarity || !rarity)) {
             uniqueExtensions.push(cursor.value);
         } else {
             callback(uniqueExtensions);

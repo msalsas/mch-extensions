@@ -8,9 +8,10 @@ const uniquePrevPage = () => extensionStore.uniquePrevPage();
 const uniqueNextPage = () => extensionStore.uniqueNextPage();
 const loadAll = () => extensionStore.loadAll();
 const loadAllProgress = () => extensionStore.loadAllProgress();
-const getUniqueExtensions = () => extensionStore.getUniqueExtensions();
 const getOrder = () => extensionStore.getOrder();
-const onOrderChange = (evt) => extensionStore.getUniqueExtensions(evt);
+const getRarities = () => extensionStore.getRarities();
+const onOrderChange = (evt) => extensionStore.setOrder(evt);
+const onRarityChange = (evt) => extensionStore.setRarity(evt);
 
 initUnique();
 
@@ -20,10 +21,14 @@ initUnique();
   <div class="extensions">
     <h1>{{ extensionStore.uniqueCount }} extensions</h1>
 
-    <v-btn v-if="!extensionStore.loadingAll" @click="loadAll">Load all</v-btn>
-    <v-btn v-else disabled="disabled"><v-progress-circular indeterminate :size="20" :width="3"></v-progress-circular>&nbsp;Loading</v-btn>
+    <v-btn v-if="!extensionStore.loadingAll && !extensionStore.allLoaded" @click="loadAll">Load all</v-btn>
+    <v-btn v-else-if="extensionStore.loadingAll" disabled="disabled"><v-progress-circular indeterminate :size="20" :width="3"></v-progress-circular>&nbsp;Loading</v-btn>
 
     <div v-if="extensionStore.loadingAll">
+      <v-btn class="ma-2" @click="loadAllStop">
+        <v-icon start icon="mdi-minus-circle"></v-icon>
+        Cancel
+      </v-btn>
       <h2>Progress: {{ Math.round(loadAllProgress()) }}%</h2>
       <v-progress-linear :model-value="loadAllProgress()" :height="7"></v-progress-linear>
     </div>
@@ -31,6 +36,12 @@ initUnique();
     <div class="order-filters">
       <label>Order</label>
       <v-select aria-label="order" :items="getOrder()" @update:modelValue="onOrderChange">
+      </v-select>
+    </div>
+
+    <div class="order-filters">
+      <label>Rarity</label>
+      <v-select aria-label="rarity" :items="getRarities()" @update:modelValue="onRarityChange">
       </v-select>
     </div>
 
