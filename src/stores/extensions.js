@@ -148,12 +148,14 @@ export const useExtensionsStore = defineStore("extensions", () => {
 
     function setRarity(rarity) {
         selectedRarity.value = rarity;
+        uniqueCurrentPage.value = 1;
 
         getUniqueExtensions();
     }
 
     function setOrder(order) {
         selectedOrder.value = order;
+        uniqueCurrentPage.value = 1;
 
         getUniqueExtensions();
     }
