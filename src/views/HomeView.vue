@@ -2,7 +2,9 @@
 import Extensions from "../components/Extensions.vue";
 import UniqueExtensions from "../components/UniqueExtensions.vue";
 import { ref } from "vue";
+import { useNetworkStore } from "../stores/network";
 
+const networkStore = useNetworkStore();
 const tab = ref(null);
 
 </script>
@@ -10,6 +12,7 @@ const tab = ref(null);
 <template>
   <main>
     <h1 class="d-flex justify-center">MCH Extensions</h1>
+    <v-alert v-if="!networkStore.isEthereum && !networkStore.loading" type="warning" text="Connect to Ethereum Network"></v-alert>
     <v-tabs v-model="tab">
       <v-tab value="extensions">All Extensions</v-tab>
       <v-tab value="unique-extensions">Unique Extensions</v-tab>
