@@ -12,6 +12,7 @@ const tab = ref(null);
 <template>
   <main>
     <h1 class="d-flex justify-center">MCH Extensions</h1>
+    <div><a href="/about">About</a></div>
     <v-alert v-if="!networkStore.isEthereum && !networkStore.loading" type="warning" text="Connect to Ethereum Network"></v-alert>
     <v-tabs v-model="tab">
       <v-tab value="extensions">All Extensions</v-tab>
