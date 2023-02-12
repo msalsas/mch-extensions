@@ -24,6 +24,7 @@ export const useExtensionsStore = defineStore("extensions", () => {
         {'title': 'AGI', 'value': 'agi'},
     ]);
     const rarities = ref([
+        {'title': 'All', 'value': null},
         {'title': 'C', 'value': 'Common'},
         {'title': 'U', 'value': 'Uncommon'},
         {'title': 'R', 'value': 'Rare'},
