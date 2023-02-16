@@ -174,6 +174,8 @@ export const useExtensionsStore = defineStore("extensions", () => {
         for (let i = (uniqueCurrentPage.value - 1) * limit.value; i < (uniqueCurrentPage.value - 1) * limit.value + limit.value; i++) {
             if (typeof uniqueExtensions.value[i] !== "undefined") {
                 viewUniqueExtensions.value[loopCount++] = uniqueExtensions.value[i];
+            } else if (typeof viewUniqueExtensions.value[loopCount] !== 'undefined') {
+                viewUniqueExtensions.value.splice(loopCount, 1);
             }
         }
     }
@@ -195,10 +197,7 @@ export const useExtensionsStore = defineStore("extensions", () => {
 
             if (!uniqueExtensions.value.some(extension => extension.extension_type === metadata.extension_type) &&
                 metadata.lv === maxLv(metadata.rarity)) {
-                uniqueExtensions.value.push({
-                    'id': id,
-                    ...metadata,
-                });
+                getUniqueExtensions()
             }
 
             callback(metadata);

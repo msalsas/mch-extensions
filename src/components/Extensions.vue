@@ -20,9 +20,6 @@ const nextPage = () => {
     behavior: 'smooth'
   });
 }
-const loadAll = () => extensionStore.loadAll();
-const loadAllProgress = () => extensionStore.loadAllProgress();
-const loadAllStop = () => extensionStore.loadAllStop();
 
 init();
 
@@ -31,18 +28,6 @@ init();
 <template>
   <div class="extensions">
     <h2 class="ma-2 pa-2 d-flex justify-center">{{ extensionStore.count }} extensions</h2>
-
-    <v-btn v-if="!extensionStore.loadingAll && !extensionStore.allLoaded" @click="loadAll">Load all</v-btn>
-    <v-btn v-else-if="extensionStore.loadingAll" disabled="disabled"><v-progress-circular indeterminate :size="20" :width="3"></v-progress-circular>&nbsp;Loading</v-btn>
-
-    <div v-if="extensionStore.loadingAll">
-      <v-btn class="ma-2" @click="loadAllStop">
-        <v-icon start icon="mdi-minus-circle"></v-icon>
-        Cancel
-      </v-btn>
-      <h2>Progress: {{ Math.round(loadAllProgress()) }}%</h2>
-      <v-progress-linear :model-value="loadAllProgress()" :height="7"></v-progress-linear>
-    </div>
 
     <div class="d-flex flex-row-reverse mb-6 bg-surface-variant">
       <v-sheet class="ma-2 bg-surface-variant">Page {{ extensionStore.currentPage }}</v-sheet>

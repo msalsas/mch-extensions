@@ -1,8 +1,8 @@
 function initDB(callback) {
     try {
-        const dbName = "mdh-extensions";
+        const dbName = "mdh-extensions-test";
 
-        const request = indexedDB.open(dbName, 4);
+        const request = indexedDB.open(dbName, 1);
 
         request.onerror = (event) => {
             // Handle errors.
@@ -28,9 +28,7 @@ function initDB(callback) {
         };
         request.onupgradeneeded = (event) => {
             const db = event.target.result;
-            const objectStore = event.oldVersion < 1 ?
-                db.createObjectStore("extensions", { keyPath: "id" }) :
-                request.transaction.objectStore("extensions");
+            const objectStore = db.createObjectStore("extensions", { keyPath: "id" })
 
             if(objectStore.indexNames.contains('type_name')) {
                 objectStore.deleteIndex("type_name");

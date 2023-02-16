@@ -21,7 +21,9 @@ const uniqueNextPage = () => {
   });
 }
 const loadAll = () => extensionStore.loadAll();
+const allLoaded = () => extensionStore.allLoaded();
 const loadAllProgress = () => extensionStore.loadAllProgress();
+const loadAllStop = () => extensionStore.loadAllStop();
 const getOrder = () => extensionStore.getOrder();
 const getRarities = () => extensionStore.getRarities();
 const onOrderChange = (evt) => extensionStore.setOrder(evt);
@@ -35,7 +37,7 @@ initUnique();
   <div class="extensions">
     <h2 class="ma-2 pa-2 d-flex justify-center">{{ extensionStore.uniqueCount }} extensions</h2>
 
-    <v-btn v-if="!extensionStore.loadingAll && !extensionStore.allLoaded" @click="loadAll">Load all</v-btn>
+    <v-btn v-if="!extensionStore.loadingAll && !allLoaded()" @click="loadAll">Load all</v-btn>
     <v-btn v-else-if="extensionStore.loadingAll" disabled="disabled"><v-progress-circular indeterminate :size="20" :width="3"></v-progress-circular>&nbsp;Loading</v-btn>
 
     <div v-if="extensionStore.loadingAll">
