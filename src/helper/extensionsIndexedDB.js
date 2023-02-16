@@ -1,6 +1,6 @@
 function initDB(callback) {
     try {
-        const dbName = "mdh-extensions-test";
+        const dbName = "mdh-extensions";
 
         const request = indexedDB.open(dbName, 1);
 
