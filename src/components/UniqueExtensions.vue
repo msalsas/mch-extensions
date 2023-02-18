@@ -50,8 +50,8 @@ initUnique();
       >&nbsp;Loading</v-btn
     >
     <v-btn v-if="extensionStore.loadingAll" class="ma-2" @click="loadAllStop">
-      <v-icon start icon="mdi-minus-circle"></v-icon>
-      Cancel
+      <v-icon start icon="mdi-pause"></v-icon>
+      Pause
     </v-btn>
 
     <div v-if="extensionStore.loadingAll">
