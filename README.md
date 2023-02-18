@@ -4,6 +4,9 @@
 
 This project aims to help to look up for MCH extensions filtering by rarity and ordering by attributes.
 
+- All extensions are stored with `indexedDB` (front-end side) by clicking on *"Load All"* button (Unique extensions tab). It can take some hours.
+- Then you can filter/order all unique extensions
+
 ## Project Setup
 
 ```sh
@@ -32,16 +35,6 @@ npm run test:unit
 
 ```sh
 npm run test:e2e:dev
-```
-
-This runs the end-to-end tests against the Vite development server.
-It is much faster than the production build.
-
-But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
-
-```sh
-npm run build
-npm run test:e2e
 ```
 
 ### Lint with [ESLint](https://eslint.org/)
