@@ -19,7 +19,9 @@ export const useExtensionsStore = defineStore("extensions", () => {
   const uniqueCount = ref(0);
   const tokenURIPrefix = ref("");
   const loadingAll = ref(false);
-  const loadingAllIndex = ref(parseInt(localStorage.getItem('loadingAllIndex'), 10) || 0);
+  const loadingAllIndex = ref(
+    parseInt(localStorage.getItem("loadingAllIndex"), 10) || 0
+  );
   const currentPage = ref(1);
   const uniqueCurrentPage = ref(1);
   const limit = ref(20);
@@ -98,7 +100,7 @@ export const useExtensionsStore = defineStore("extensions", () => {
     for (let i = loadingAllIndex.value; i < count.value; i++) {
       loopCount++;
       setTimeout(() => {
-        localStorage.setItem('loadingAllIndex', i);
+        localStorage.setItem("loadingAllIndex", i);
         if (!loadingAll.value) {
           loadingAllIndex.value = i;
           return;
