@@ -49,13 +49,13 @@ initUnique();
       ></v-progress-circular
       >&nbsp;Loading</v-btn
     >
+    <v-btn v-if="extensionStore.loadingAll" class="ma-2" @click="loadAllStop">
+      <v-icon start icon="mdi-minus-circle"></v-icon>
+      Cancel
+    </v-btn>
 
     <div v-if="extensionStore.loadingAll">
-      <v-btn class="ma-2" @click="loadAllStop">
-        <v-icon start icon="mdi-minus-circle"></v-icon>
-        Cancel
-      </v-btn>
-      <h2>Progress: {{ Math.floor(loadAllProgress()) }}%</h2>
+      <h2>Progress: {{ +parseFloat(loadAllProgress()).toFixed(2) }}%</h2>
       <v-progress-linear
         :model-value="loadAllProgress()"
         :height="7"
