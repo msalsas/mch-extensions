@@ -9,51 +9,86 @@ const prevPage = () => {
   window.scrollTo({
     top: 0,
     left: 0,
-    behavior: 'smooth'
+    behavior: "smooth",
   });
-}
+};
 const nextPage = () => {
   extensionStore.nextPage();
   window.scrollTo({
     top: 0,
     left: 0,
-    behavior: 'smooth'
+    behavior: "smooth",
   });
-}
+};
 
 init();
-
 </script>
 
 <template>
   <div class="extensions">
-    <h2 class="ma-2 pa-2 d-flex justify-center">{{ extensionStore.count }} extensions</h2>
+    <h2 class="ma-2 pa-2 d-flex justify-center">
+      {{ extensionStore.count }} extensions
+    </h2>
 
     <div class="d-flex flex-row-reverse mb-6 bg-surface-variant">
-      <v-sheet class="ma-2 bg-surface-variant">Page {{ extensionStore.currentPage }}</v-sheet>
-      <v-sheet class="ma-2 pa-2 bg-surface-variant"><v-btn v-if="extensionStore.currentPage < extensionStore.count/extensionStore.limit" @click="nextPage">Next</v-btn></v-sheet>
-      <v-sheet class="ma-2 pa-2 bg-surface-variant"><v-btn v-if="extensionStore.currentPage > 1" @click="prevPage">Prev</v-btn></v-sheet>
+      <v-sheet class="ma-2 bg-surface-variant"
+        >Page {{ extensionStore.currentPage }}</v-sheet
+      >
+      <v-sheet class="ma-2 pa-2 bg-surface-variant"
+        ><v-btn
+          v-if="
+            extensionStore.currentPage <
+            extensionStore.count / extensionStore.limit
+          "
+          @click="nextPage"
+          >Next</v-btn
+        ></v-sheet
+      >
+      <v-sheet class="ma-2 pa-2 bg-surface-variant"
+        ><v-btn v-if="extensionStore.currentPage > 1" @click="prevPage"
+          >Prev</v-btn
+        ></v-sheet
+      >
     </div>
 
     <ul>
-      <li v-for="extension in extensionStore.viewExtensions">
+      <li
+        v-for="extension in extensionStore.viewExtensions"
+        :key="extension.id"
+      >
         <Extension
-            :type_name="extension.type_name"
-            :external_url="extension.external_url"
-            :extension_url="extension.extension_url"
-            :image_url="extension.image_url"
-            :lv="extension.lv"
-            :hp="extension.hp"
-            :phy="extension.phy"
-            :int="extension.int"
-            :agi="extension.agi"/>
+          :type_name="extension.type_name"
+          :external_url="extension.external_url"
+          :extension_url="extension.extension_url"
+          :image_url="extension.image_url"
+          :lv="extension.lv"
+          :hp="extension.hp"
+          :phy="extension.phy"
+          :int="extension.int"
+          :agi="extension.agi"
+        />
       </li>
     </ul>
 
     <div class="d-flex flex-row-reverse mb-6 bg-surface-variant">
-      <v-sheet class="ma-2 bg-surface-variant">Page {{ extensionStore.currentPage }}</v-sheet>
-      <v-sheet class="ma-2 pa-2 bg-surface-variant"><v-btn v-if="extensionStore.currentPage < extensionStore.count/extensionStore.limit" @click="nextPage">Next</v-btn></v-sheet>
-      <v-sheet class="ma-2 pa-2 bg-surface-variant"><v-btn v-if="extensionStore.currentPage > 1" @click="prevPage">Prev</v-btn></v-sheet>
+      <v-sheet class="ma-2 bg-surface-variant"
+        >Page {{ extensionStore.currentPage }}</v-sheet
+      >
+      <v-sheet class="ma-2 pa-2 bg-surface-variant"
+        ><v-btn
+          v-if="
+            extensionStore.currentPage <
+            extensionStore.count / extensionStore.limit
+          "
+          @click="nextPage"
+          >Next</v-btn
+        ></v-sheet
+      >
+      <v-sheet class="ma-2 pa-2 bg-surface-variant"
+        ><v-btn v-if="extensionStore.currentPage > 1" @click="prevPage"
+          >Prev</v-btn
+        ></v-sheet
+      >
     </div>
   </div>
 </template>

@@ -1,5 +1,4 @@
 <script setup>
-
 defineProps({
   type_name: {
     type: String,
@@ -38,13 +37,12 @@ defineProps({
     required: true,
   },
 });
-
 </script>
 
 <template>
   <h2>{{ type_name }}</h2>
   <a :href="extension_url" target="_blank">
-    <img :src="image_url" :alt="type_name" width="100"/>
+    <img :src="image_url" :alt="type_name" width="100" />
   </a>
   <div class="attributes">
     <div>Level: {{ lv }}</div>
@@ -56,8 +54,8 @@ defineProps({
 </template>
 
 <style scoped>
-  .attributes {
-    display: inline-block;
-    margin: 50px;
-  }
+.attributes {
+  display: inline-block;
+  margin: 50px;
+}
 </style>
