@@ -98,7 +98,11 @@ export const useExtensionsStore = defineStore("extensions", () => {
 
                     console.log('Loading metadata for ' + id)
 
-                    saveMetadata(id);
+                    saveMetadata(id, function () {
+                        if (allLoaded()) {
+                            loadingAll.value = false;
+                        }
+                    });
                 }, i);
             }, 1000 * i);
         }
@@ -209,7 +213,7 @@ export const useExtensionsStore = defineStore("extensions", () => {
     }
 
     function allLoaded() {
-        return loadAllProgress() === 100;
+        return Math.floor(loadAllProgress()) === 100;
     }
 
     function prevPage() {

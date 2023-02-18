@@ -43,7 +43,7 @@ defineProps({
 
 <template>
   <h2>{{ type_name }}</h2>
-  <a :href="extension_url">
+  <a :href="extension_url" target="_blank">
     <img :src="image_url" :alt="type_name" width="100"/>
   </a>
   <div class="attributes">

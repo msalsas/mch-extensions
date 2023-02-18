@@ -45,7 +45,7 @@ initUnique();
         <v-icon start icon="mdi-minus-circle"></v-icon>
         Cancel
       </v-btn>
-      <h2>Progress: {{ Math.round(loadAllProgress()) }}%</h2>
+      <h2>Progress: {{ Math.floor(loadAllProgress()) }}%</h2>
       <v-progress-linear :model-value="loadAllProgress()" :height="7"></v-progress-linear>
     </div>
 
