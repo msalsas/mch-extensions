@@ -11,10 +11,11 @@ describe("Extension", () => {
     const wrapper = mount(Extension, {
       props: {
         type_name: "Brave Armor",
-        lv: "55",
-        hp: "34",
-        phy: "11",
-        int: "34",
+        lv: 55,
+        hp: 34,
+        phy: 11,
+        int: 34,
+        agi: 22,
         external_url: TEST_EXTERNAL_URL,
         extension_url: TEST_URL,
         image_url: IMAGE_URL,
@@ -26,6 +27,7 @@ describe("Extension", () => {
     expect(wrapper.text()).toContain("HP: 34");
     expect(wrapper.text()).toContain("PHY: 11");
     expect(wrapper.text()).toContain("INT: 34");
+    expect(wrapper.text()).toContain("AGI: 22");
     expect(wrapper.html()).toContain(IMAGE_URL);
     expect(wrapper.html()).toContain(TEST_URL);
   });

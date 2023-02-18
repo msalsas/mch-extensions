@@ -2,6 +2,11 @@ function initDB(callback) {
   try {
     const dbName = "mch-extensions";
 
+    if (typeof indexedDB === "undefined") {
+      console.log("indexedDB is not defined");
+      return;
+    }
+
     const request = indexedDB.open(dbName, 1);
 
     request.onerror = (event) => {

@@ -2,6 +2,8 @@
 
 ## MyCryptoHeroes extensions app
 
+This project aims to help to look up for MCH extensions filtering by rarity and ordering by attributes.
+
 ## Project Setup
 
 ```sh
