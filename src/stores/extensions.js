@@ -95,17 +95,26 @@ export const useExtensionsStore = defineStore("extensions", () => {
   }
 
   function loadAll() {
-    let loopCount = 0;
+    if (loadingAll.value) {
+      return;
+    }
     loadingAll.value = true;
-    for (let i = loadingAllIndex.value; i < count.value; i++) {
-      loopCount++;
-      setTimeout(() => {
-        localStorage.setItem("loadingAllIndex", i);
-        if (!loadingAll.value) {
-          loadingAllIndex.value = i;
-          return;
-        }
-        extensionMethod(
+
+    const timer = setInterval(function () {
+      if (!loadingAll.value) {
+        clearInterval(timer);
+        return;
+      }
+
+      if (loadingAllIndex.value > count.value) {
+        loadingAllIndex.value = 0;
+        loadingAll.value = false;
+        clearInterval(timer);
+        return;
+      }
+
+      localStorage.setItem("loadingAllIndex", loadingAllIndex.value);
+      extensionMethod(
           "tokenByIndex",
           (id) => {
             if (extensions.value.some((extension) => extension.id === id)) {
@@ -120,10 +129,9 @@ export const useExtensionsStore = defineStore("extensions", () => {
               }
             });
           },
-          i
-        );
-      }, 1000 * loopCount);
-    }
+          loadingAllIndex.value++
+      );
+    }, 1000);
   }
 
   function loadAllStop() {
@@ -256,11 +264,12 @@ export const useExtensionsStore = defineStore("extensions", () => {
   }
 
   function loadAllProgress() {
-    return (extensions.value.length / count.value) * 100;
+    const percentage = (extensions.value.length / count.value) * 100;
+    return percentage < 100 ? percentage : 100;
   }
 
   function allLoaded() {
-    return Math.floor(loadAllProgress()) === 100;
+    return extensions.value.length === count.value;
   }
 
   function prevPage() {
