@@ -8,6 +8,9 @@ This project aims to help to look up for MCH extensions filtering by rarity and 
 - Then you can filter/order all unique extensions.
 - You need to be connected to Ethereum with Metamask or any other Ethereum wallet.
 
+*[My Crypto Heroes](https://www.mycryptoheroes.net/) is an RPG battle game that is built on the Ethereum blockchain.
+Use this code to sign up if you want to get a special replica heroe: **YuiN***
+
 ## Project Setup
 
 ```sh
