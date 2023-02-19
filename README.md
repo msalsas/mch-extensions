@@ -5,7 +5,8 @@
 This project aims to help to look up for MCH extensions filtering by rarity and ordering by attributes.
 
 - All extensions are stored with `indexedDB` (front-end side) by clicking on *"Load All"* button (Unique extensions tab). It can take some hours.
-- Then you can filter/order all unique extensions
+- Then you can filter/order all unique extensions.
+- You need to be connected to Ethereum with Metamask or any other Ethereum wallet.
 
 ## Project Setup
 
