@@ -8,6 +8,9 @@
     <p class="d-flex justify-center">
       I made this web application to find best attribute extensions by rarity.
     </p>
+    <p class="d-flex justify-center">
+      <a href="https://github.com/msalsas/mch-extensions/">Source code</a>
+    </p>
   </div>
 </template>
 
